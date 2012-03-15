@@ -1,0 +1,100 @@
+Compiled from "Hello.scala"
+public final class com.scalalabs.disasm.input.Hello extends java.lang.Object
+  SourceFile: "Hello.scala"
+  ScalaSig: length = 0x3
+   05 00 00 
+  RuntimeVisibleAnnotations: length = 0xB
+   00 01 00 21 00 01 00 22 73 00 23 
+  InnerClass: 
+   public final #39 of #41; //class com/scalalabs/disasm/input/Hello$$anonfun$1 of class com/scalalabs/disasm/input/Hello
+  minor version: 0
+  major version: 49
+  Constant pool:
+const #1 = Asciz	SourceFile;
+const #2 = Asciz	Hello.scala;
+const #3 = Asciz	t3;
+const #4 = Asciz	(Lscala/Function2;)V;
+const #5 = Asciz	Code;
+const #6 = Asciz	com/scalalabs/disasm/input/Hello$;
+const #7 = class	#6;	//  com/scalalabs/disasm/input/Hello$
+const #8 = Asciz	MODULE$;
+const #9 = Asciz	Lcom/scalalabs/disasm/input/Hello$;;
+const #10 = NameAndType	#8:#9;//  MODULE$:Lcom/scalalabs/disasm/input/Hello$;
+const #11 = Field	#7.#10;	//  com/scalalabs/disasm/input/Hello$.MODULE$:Lcom/scalalabs/disasm/input/Hello$;
+const #12 = NameAndType	#3:#4;//  t3:(Lscala/Function2;)V
+const #13 = Method	#7.#12;	//  com/scalalabs/disasm/input/Hello$.t3:(Lscala/Function2;)V
+const #14 = Asciz	(Lscala/Function2<Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;>;)V;
+const #15 = Asciz	Signature;
+const #16 = Asciz	t3a;
+const #17 = Asciz	()V;
+const #18 = NameAndType	#16:#17;//  t3a:()V
+const #19 = Method	#7.#18;	//  com/scalalabs/disasm/input/Hello$.t3a:()V
+const #20 = Asciz	inc;
+const #21 = Asciz	()Lscala/Function2;;
+const #22 = NameAndType	#20:#21;//  inc:()Lscala/Function2;
+const #23 = Method	#7.#22;	//  com/scalalabs/disasm/input/Hello$.inc:()Lscala/Function2;
+const #24 = Asciz	()Lscala/Function2<Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;>;;
+const #25 = Asciz	loopTest;
+const #26 = NameAndType	#25:#17;//  loopTest:()V
+const #27 = Method	#7.#26;	//  com/scalalabs/disasm/input/Hello$.loopTest:()V
+const #28 = Asciz	main;
+const #29 = Asciz	([Ljava/lang/String;)V;
+const #30 = NameAndType	#28:#29;//  main:([Ljava/lang/String;)V
+const #31 = Method	#7.#30;	//  com/scalalabs/disasm/input/Hello$.main:([Ljava/lang/String;)V
+const #32 = Asciz	ScalaSig;
+const #33 = Asciz	Lscala/reflect/ScalaSignature;;
+const #34 = Asciz	bytes;
+const #35 = Asciz	%;Q!\t-\tQS3mY>T!a%t/;1A3jgXNI1oY1mC2'm1m\7AA\"D)aBE\t)*7m_NQ\rE1R\"\nM!7b]T!FU4-%\t1qJ6fGR\"!iQaGgG.Y;i1bU2bY|%M[3di\")q$CA1A(8jiz\"aE5!\taI[Lg%OA$JMiA!8ji\")&\taS!M]4t!\rI\"LWiQ!:sCf\"!eqBA&/3fM&G\r'RN\4=R\"\t)7p_B$Vm;BqaNC(Aj],!\t3ibDPwiBR;oGRLwNeiB \rIe6B\t%t7\r\t6!\taQiN\nG#\tkA$QDCHAE\t1:1;
+const #36 = Asciz	RuntimeVisibleAnnotations;
+const #37 = Asciz	InnerClasses;
+const #38 = Asciz	com/scalalabs/disasm/input/Hello$$anonfun$1;
+const #39 = class	#38;	//  com/scalalabs/disasm/input/Hello$$anonfun$1
+const #40 = Asciz	com/scalalabs/disasm/input/Hello;
+const #41 = class	#40;	//  com/scalalabs/disasm/input/Hello
+const #42 = Asciz	java/lang/Object;
+const #43 = class	#42;	//  java/lang/Object
+
+{
+public static final void t3(scala.Function2);
+  Code:
+   Stack=2, Locals=1, Args_size=1
+   0:	getstatic	#11; //Field com/scalalabs/disasm/input/Hello$.MODULE$:Lcom/scalalabs/disasm/input/Hello$;
+   3:	aload_0
+   4:	invokevirtual	#13; //Method com/scalalabs/disasm/input/Hello$.t3:(Lscala/Function2;)V
+   7:	return
+  Signature: length = 0x2
+   00 0E 
+
+public static final void t3a();
+  Code:
+   Stack=1, Locals=0, Args_size=0
+   0:	getstatic	#11; //Field com/scalalabs/disasm/input/Hello$.MODULE$:Lcom/scalalabs/disasm/input/Hello$;
+   3:	invokevirtual	#19; //Method com/scalalabs/disasm/input/Hello$.t3a:()V
+   6:	return
+
+public static final scala.Function2 inc();
+  Code:
+   Stack=1, Locals=0, Args_size=0
+   0:	getstatic	#11; //Field com/scalalabs/disasm/input/Hello$.MODULE$:Lcom/scalalabs/disasm/input/Hello$;
+   3:	invokevirtual	#23; //Method com/scalalabs/disasm/input/Hello$.inc:()Lscala/Function2;
+   6:	areturn
+  Signature: length = 0x2
+   00 18 
+
+public static final void loopTest();
+  Code:
+   Stack=1, Locals=0, Args_size=0
+   0:	getstatic	#11; //Field com/scalalabs/disasm/input/Hello$.MODULE$:Lcom/scalalabs/disasm/input/Hello$;
+   3:	invokevirtual	#27; //Method com/scalalabs/disasm/input/Hello$.loopTest:()V
+   6:	return
+
+public static final void main(java.lang.String[]);
+  Code:
+   Stack=2, Locals=1, Args_size=1
+   0:	getstatic	#11; //Field com/scalalabs/disasm/input/Hello$.MODULE$:Lcom/scalalabs/disasm/input/Hello$;
+   3:	aload_0
+   4:	invokevirtual	#31; //Method com/scalalabs/disasm/input/Hello$.main:([Ljava/lang/String;)V
+   7:	return
+
+}
+
