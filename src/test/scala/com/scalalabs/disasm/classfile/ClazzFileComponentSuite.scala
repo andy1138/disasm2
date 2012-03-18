@@ -19,13 +19,13 @@ class ClazzFileComponentSuite extends FunSuite with ShouldMatchers {
   
   ignore("basic") {
 
-    val filename = "./target/scala-2.9.1/sbt-0.11.2/test-classes/com/scalalabs/disasm/input/Hello.class"
+    val filename = "./target/scala-2.9.1/sbt-0.11.2/test-classes/com/scalalabs/disasm/input/Hello$.class"
       
           val t = new ClazzFileComponent with FileLoader with JasminFormat with StdOut
 
 //    val t = new TestObj with com.scalalabs.disasm.classfile.ClazzFileComponent with FileLoader
     t.loader.load(filename)
-    println( "S " + t.loader.stream )
+//    println( "S " + t.loader.stream )
     val clazzFile = t.parse
     import clazzFile._
     
@@ -43,14 +43,13 @@ class ClazzFileComponentSuite extends FunSuite with ShouldMatchers {
 
   test("basic-2") {
   	
-  	val filename = "./target/scala-2.9.1/sbt-0.11.2/test-classes/com/scalalabs/disasm/input/Hello.class"
+  	val filename = "./target/scala-2.9.1/sbt-0.11.2/test-classes/com/scalalabs/disasm/input/Hello$.class"
   			
 		val t = new ClazzFileComponent with FileLoader with JasminFormat with StdOut
   			
 		t.loader.load(filename)
-		println( "S " + t.loader.stream )
 		val clazzFile = t.parse
-		import clazzFile._
+//		import clazzFile._
 		
   	t.formatter.format(clazzFile)
   }

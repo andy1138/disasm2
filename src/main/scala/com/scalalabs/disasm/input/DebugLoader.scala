@@ -16,12 +16,20 @@ trait DebugLoader extends LoaderRepositoryComponent {
     var buffer:Array[Byte] = Array(0)
     
     
+    def toCharList( s:String): List[Int] = {
+      s.toList match {
+        case Nil => Nil
+        case h1 :: h2 :: t => java.lang.Integer.parseInt( "" + h1+h2, 16 ) :: toCharList( t.mkString("") )
+        case h :: t => java.lang.Integer.parseInt( "" + h, 16 ) :: Nil // List[Int]()
+      }
+    }
+    
     def load(b:T) {
           println("DebugLoader a length: " + b.toString.length)
       b match {
         case a:String => 
           println("DebugLoader a length: " + a.length)
-        	buffer  = a.sliding(2).map( i => Integer.parseInt( i, 16 ).toByte ).toArray
+        	buffer  = toCharList(a).map( i => i.toByte ).toArray
 //        	buffer = x.flatten(_)
         	println("DebugLoader length: " + buffer.length)
 		    	stream = new DataInputStream(new ByteArrayInputStream(buffer))

@@ -15,7 +15,7 @@ trait JasminFormat extends FormatRepositoryComponent {
 	    println
 	    println(".magic 0x" + clazzFile.magic.toHexString)
 	    println(".bytecode " + clazzFile.major_version+"."+ clazzFile.minor_version)
-	    println(".source "  )
+	    println(".source " + sourceFile(clazzFile))
 	    clazzSpec(clazzFile)
 	    superSpec(clazzFile)
 	    implements(clazzFile)
@@ -32,7 +32,7 @@ trait JasminFormat extends FormatRepositoryComponent {
   
   
   def clazzSpec(clazzFile:ClazzFile) {
-    println(".class 0x" + clazzFile.access_flags.toHexString + " " + clazzName(clazzFile, clazzFile.this_class ) )
+    println(".class " + clazzAccess( clazzFile.access_flags) + " " + clazzName(clazzFile, clazzFile.this_class ) )
   }
   
   def superSpec(clazzFile:ClazzFile) {
@@ -56,7 +56,7 @@ trait JasminFormat extends FormatRepositoryComponent {
 
   def fields(clazzFile:ClazzFile) {
     clazzFile.fields.foreach{ f =>
-    	println(".field 0x" + f.access_flags.toHexString + " " + clazzFile.constantPool.utfString(f.name_index) + " " + clazzFile.constantPool.utfString(f.descriptor_index) )
+    	println(".field " + fieldAccess(f.access_flags) + " " + clazzFile.constantPool.utfString(f.name_index) + " " + clazzFile.constantPool.utfString(f.descriptor_index) )
 
     	
     	println(".end field\n")
@@ -65,9 +65,9 @@ trait JasminFormat extends FormatRepositoryComponent {
   
   def methods(clazzFile:ClazzFile) {
     clazzFile.methods.foreach{ m =>
-    	println(".method 0x" + m.access_flags.toHexString + " " + clazzFile.constantPool.utfString(m.name_index) + " " + clazzFile.constantPool.utfString(m.descriptor_index) )
+    	println(".method " + methodAccess(m.access_flags) + " " + clazzFile.constantPool.utfString(m.name_index) + " " + clazzFile.constantPool.utfString(m.descriptor_index) )
 
-    	m.attributes.foreach( i => println(">> methods attr " + i))
+//    	m.attributes.foreach( i => println(">> methods attr " + i))
     	findCodeAttr(m.attributes) match {
 	  	  case Some(c) =>
 	  	    println( ".limit stack " + c.max_stack)
@@ -100,22 +100,83 @@ trait JasminFormat extends FormatRepositoryComponent {
     }
   }
 
+  def methodAccess(access:Int): String = {
+    import ClazzFile._
+    var acc = scala.collection.mutable.ListBuffer[String]()
+      
+    if( (access & JAVA_ACC_PUBLIC) != 0) acc += "public"
+	  if( (access & JAVA_ACC_PRIVATE) != 0) acc += "private"
+	  if( (access & JAVA_ACC_PROTECTED) != 0) acc += "protected"
+	  if( (access & JAVA_ACC_STATIC) != 0) acc += "static"
+	  if( (access & JAVA_ACC_FINAL)  != 0) acc += "final"
+	  if( (access & JAVA_ACC_SYNCHRONIZED) != 0) acc += "synchronized"
+	  if( (access & JAVA_ACC_BRIDGE) != 0) acc += "bridge"
+	  if( (access & JAVA_ACC_VARARGS) != 0) acc += "varargs"
+	  if( (access & JAVA_ACC_NATIVE) != 0) acc += "native"
+	  if( (access & JAVA_ACC_ABSTRACT) != 0) acc += "abstract"
+	  if( (access & JAVA_ACC_STRICT) != 0) acc += "strict"
+	  if( (access & JAVA_ACC_SYNTHETIC) != 0) acc += "synthetic"
+	    
+   acc.mkString(" ") 
+//   access.toHexString + " " + acc.mkString(" ") 
+  }
   
-  def clazzName(clazzFile:ClazzFile, idx:Int) = {
+  def clazzName(clazzFile:ClazzFile, idx:Int):String = {
     clazzFile.constantPool.get(idx) match {
       case CONSTANT_Class_info(cidx) => clazzFile.constantPool.utfString(cidx)
-      case _ => "ERR1"
+      case _ => "ERR-clazzName: " + idx + "  " + clazzFile.constantPool.at(idx)
     }
   }
   
-  def methodName(clazzFile:ClazzFile, idx:Int) = {
+  def clazzAccess( access:Int): String = {
+    import ClazzFile._
+    var acc = scala.collection.mutable.ListBuffer[String]()
+   
+		if( (access & JAVA_ACC_PUBLIC) != 0) acc += "public"
+		if( (access & JAVA_ACC_FINAL) != 0) acc += "final"
+		if( (access & JAVA_ACC_SUPER) != 0) acc += "super"
+		if( (access & JAVA_ACC_INTERFACE) != 0) acc += "interface"
+		if( (access & JAVA_ACC_ABSTRACT) != 0) acc += "abstract"
+		if( (access & JAVA_ACC_SYNTHETIC) != 0) acc += "synthetic"
+		if( (access & JAVA_ACC_ANNOTATION) != 0) acc += "annotation"
+		if( (access & JAVA_ACC_ENUM) != 0) acc += "enum"
+   
+    acc.mkString(" ") 
+  }
+
+  def fieldAccess( access:Int): String = {
+		import ClazzFile._
+		var acc = scala.collection.mutable.ListBuffer[String]()
+		
+		if( (access & JAVA_ACC_PUBLIC) != 0) acc += "public"
+		if( (access & JAVA_ACC_PRIVATE) != 0) acc += "private"
+		if( (access & JAVA_ACC_PROTECTED) != 0) acc += "protected"
+		if( (access & JAVA_ACC_STATIC) != 0) acc += "static"
+		if( (access & JAVA_ACC_FINAL) != 0) acc += "final"
+		if( (access & JAVA_ACC_VOLATILE) != 0) acc += "volatile"
+		if( (access & JAVA_ACC_TRANSIENT) != 0) acc += "transient"
+		if( (access & JAVA_ACC_SYNTHETIC) != 0) acc += "synthetic"
+		if( (access & JAVA_ACC_ENUM) != 0) acc += "enum"
+		
+		acc.mkString(" ") 
+  }
+  
+  def sourceFile(clazzFile:ClazzFile):String = {
+    findSourceAttr( clazzFile.attributes) match {
+      case Some(s) => clazzFile.constantPool.utfString(s.sourcefile_index)
+      case None => "ERR-sourceFile: " 
+    }
+  }
+  
+  def methodName(clazzFile:ClazzFile, idx:Int):String = {
   	clazzFile.constantPool.get(idx) match {
   	case CONSTANT_Class_info(cidx) => clazzFile.constantPool.utfString(cidx)
-  	case _ => "ERR1"
+  	case _ => "ERR-methodName"
   	  
   	}
   }
   
+  def findSourceAttr(a:Array[attribute_info]):Option[SourceFile_attribute] = findAttr(a, ClazzFile.ATTRIB_SourceFile)
 
   def findCodeAttr(a:Array[attribute_info]):Option[Code_attribute] = findAttr(a, ClazzFile.ATTRIB_Code)
   

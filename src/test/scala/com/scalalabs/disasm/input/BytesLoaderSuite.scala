@@ -8,9 +8,10 @@ import org.junit.runner.RunWith
 @RunWith(classOf[JUnitRunner])
 class BytesLoaderSuite extends FunSuite with ShouldMatchers {
 
+  
   class TestObj
   
-  ignore("basic") {
+  test("basic") {
     val bytes:Array[Byte] = Array[Byte](00, 01, 0xff.toByte)
 
     val t = new TestObj with BytesLoader
@@ -24,7 +25,7 @@ class BytesLoaderSuite extends FunSuite with ShouldMatchers {
   }
 
   
-  test("bytes") {
+  ignore("bytes") {
 
     val t = new TestObj with DebugLoader
     t.loader.load(clazzStr)

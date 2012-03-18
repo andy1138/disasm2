@@ -18,7 +18,14 @@ class CPool {
   private val items = new scala.collection.mutable.ArrayBuffer[cp_info]
   
   def add( a:Array[cp_info]) { a.foreach( add(_)) }
-  def add( i:cp_info ) { items += i }
+  def add( i:cp_info ) { 
+    items += i 
+    i match {
+      case e:CONSTANT_Long_info  => items += CONSTANT_Dummy()
+      case e:CONSTANT_Double_info  => items += CONSTANT_Dummy()
+      case _ =>
+    	}
+    }
   def get( idx:Int) = items(idx)
   def at( idx:Int) = items(idx)
   
@@ -33,7 +40,7 @@ class CPool {
   def nameTypeInfo( idx:Int): String = {
     items(idx) match {
       case CONSTANT_NameAndType_info(n, t) => utfString(n) + ":" + utfString(t)
-      case _ => "ERR_NT"
+      case _ => "ERR-nameTypeInfo " + idx
     }
   }
   
@@ -41,12 +48,31 @@ class CPool {
     if( idx == 0 ) "" else
 	    items(idx) match {
 	      case CONSTANT_Utf8_info( bytes ) => new String( bytes )
-	      case _ => "ERR"
+	      case _ => "ERR-utfString " + idx
 	    }
+  }
+  
+  
+  private def itemToString( i: cp_info ):String = {
+    i match {
+      case CONSTANT_Utf8_info(s) => new String(printStr(s))
+      case _ => ""
+    }
+  }
+  
+  private def printStr( b:Array[Byte]): Array[Byte] = {
+//    b.map( c => if( c.toChar.isLetterOrDigit || c.toChar.isWhitespace ) c else '.'.toByte )
+    b
+  }
+  
+  def dump() {
+    var c = 0
+    println(">> CPOOL size: " + items.length )
+    items.foreach( i =>  { c += 1; println("[" + c + "] "  + i + " '" + itemToString(i) + "'" ) })
   }
 } 
 
-sealed class cp_info(tag:Int) 
+sealed class cp_info(val tag:Int) 
 
 case class CONSTANT_Dummy(  ) extends cp_info(ClazzFile.CONSTANT_DUMMY)
 case class CONSTANT_Class_info( name_index:Int ) extends cp_info(ClazzFile.CONSTANT_CLASS)

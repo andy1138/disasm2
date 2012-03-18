@@ -48,29 +48,26 @@ trait ClazzFileComponent extends ClazzFileRepositoryComponent {
     	    case CONSTANT_InvokeDynamic => CONSTANT_InvokeDynamic_info( nextU2, nextU2 )
     	    case _ => println( ">> ERR parseConstantPool " + tag); throw new Exception(">> ERR parseConstantPool " + tag)
     	  }
-    	  println(">>parseConstantPool tag: " + tag + " res: " + t)
+//    	  println(">>parseConstantPool tag: " + tag + " res: " + t)
     	  
     	  t
     	}
     	
-      def cpLoop[T](l:Int, f: => T) = {
-        val buf = scala.collection.mutable.ArrayBuffer[cp_info]()
+      def cpLoop[T](l:Int, f: => T):List[cp_info] = {
+//        List.tabulate( l ) { a =>  parseConstantPool()}
+        val lst = scala.collection.mutable.ListBuffer[cp_info]()
         var i =0
         while( i < l) {
-          print("[" + (i+1) + "] ")
-          val v = parseConstantPool()
-          buf += v
-          v match {
-            case e:CONSTANT_Long_info  => i += 1
-            case e:CONSTANT_Double_info  => i += 1
+          val item = parseConstantPool()
+          lst += item
+          item match {
+            case x:CONSTANT_Long_info => i += 1
+            case x:CONSTANT_Double_info => i += 1
             case _ =>
           }
-          i+= 1
-          
+          i += 1
         }
-//      	List.tabulate( l ) { a => print("["+(a+1)+ "] "); f}
-        
-        buf.toList
+        lst.toList
       }
 
       
@@ -83,7 +80,7 @@ trait ClazzFileComponent extends ClazzFileRepositoryComponent {
     	  val access_flags = nextU2
     	  val name_index = nextU2
     	  val descriptor_index = nextU2
-    	  println("methodInfo: 0x" +  access_flags.toHexString + " " + cpool.utfString(name_index) + " " + cpool.utfString(descriptor_index))
+//    	  println(">>methodInfo: 0x" +  access_flags.toHexString + " " + cpool.utfString(name_index) + " " + cpool.utfString(descriptor_index))
     	  new method_info( access_flags, name_index, descriptor_index, loop(nextU2, attributeInfo()).toArray )
     	}
     	
@@ -96,15 +93,15 @@ trait ClazzFileComponent extends ClazzFileRepositoryComponent {
     	    case _ => "*Unknown*"
     	  }
     	  
-    	  println(">>loading " +nameIdx.toHexString + " " + name + " len: " + attrLength)
+//    	  println(">>loading " +nameIdx.toHexString + " " + name + " len: " + attrLength)
     	  
     	  val att = name match {
     	    case ATTRIB_ConstantValue => ConstantValue_attribute( nextU2 )
     	    case ATTRIB_SourceFile => SourceFile_attribute( nextU2 )
-    	    case ATTRIB_InnerClasses => 
-    	      val loopCnt = nextU2
-    	      println("InnerClasses_attribute loop: " + loopCnt  )
-    	      InnerClasses_attribute( loop(loopCnt, IC_classes(nextU2, nextU2, nextU2, nextU2)).toArray )
+//    	    case ATTRIB_InnerClasses => 
+//    	      val loopCnt = nextU2
+//    	      println("InnerClasses_attribute loop: " + loopCnt  )
+//    	      InnerClasses_attribute( loop(loopCnt, IC_classes(nextU2, nextU2, nextU2, nextU2)).toArray )
     	    case ATTRIB_RuntimeVisibleAnnotations => RuntimeVisibleAnnotations_attribute( 
     	        			loop(nextU2, loadRVAAnnotations() ).toArray )
     	    case ATTRIB_Signature => Signature_attribute( nextU2 )
@@ -119,17 +116,17 @@ trait ClazzFileComponent extends ClazzFileRepositoryComponent {
 //    	    case ClazzFile.ATTRIB_ScalaSig => ScalaSig_attribute( List.tabulate(loader.nextU2) { _ => InnerClasses_attribute_classes(loader.nextU2, loader.nextU2, loader.nextU2, loader.nextU2)}.toArray )
     	    case _ => new UnknownAttribute(name,  loop(attrLength, nextU1).toArray )
     	  }
-    	  att match {
-    	    case SourceFile_attribute(n) => 
-    	      println("SourceFile: " + cpool.utfString(n))
-    	    case Signature_attribute(s) =>
-    	      println("Signature: " + cpool.utfString(s))
-    	    case InnerClasses_attribute(l) => 
-    	      l.foreach { i =>
-    	        println( "InnerClasses Inner: " + cpool.classInfo(i.inner_class_info_index) + " Outer: " + cpool.classInfo(i.outer_class_info_index) + " IName: " + cpool.utfString(i.inner_name_index) +" Flags: 0x" + i.inner_class_access_flags.toHexString )
-    	      }  
-    	    case a => println("Attr Other: " + a)
-    	  }
+//    	  att match {
+//    	    case SourceFile_attribute(n) => 
+//    	      println("SourceFile: " + cpool.utfString(n))
+//    	    case Signature_attribute(s) =>
+//    	      println("Signature: " + cpool.utfString(s))
+//    	    case InnerClasses_attribute(l) => 
+//    	      l.foreach { i =>
+//    	        println( "InnerClasses Inner: " + cpool.classInfo(i.inner_class_info_index) + " Outer: " + cpool.classInfo(i.outer_class_info_index) + " IName: " + cpool.utfString(i.inner_name_index) +" Flags: 0x" + i.inner_class_access_flags.toHexString )
+//    	      }  
+//    	    case a => println("Attr Other: " + a)
+//    	  }
     	  att
     	}
     	
@@ -138,13 +135,13 @@ trait ClazzFileComponent extends ClazzFileRepositoryComponent {
 
 			def loadRVAAnnotations() = {
     	  val type_index = nextU2
-    	  println("loadRVAAnnotations type: " + cpool.utfString(type_index))
+//    	  println("loadRVAAnnotations type: " + cpool.utfString(type_index))
 	    	RVA_annotation(type_index, loop(nextU2, loadRVAElementValuePair() ).toArray )  
 	    	}    	
 				
 			def loadRVAElementValuePair() = {
 			  val element_name_index = nextU2
-			  println("loadRVAElementValuePair '" + cpool.utfString(element_name_index) + "'")
+//			  println("loadRVAElementValuePair '" + cpool.utfString(element_name_index) + "'")
 			  RVA_element_value_pairs(element_name_index, loop(1, loadRVAElementValue() ).toArray ) // TODO 1
 			}    	
 			
@@ -174,25 +171,26 @@ trait ClazzFileComponent extends ClazzFileRepositoryComponent {
     	val major_version = loader.nextU2
     	   
     	val poolCount = loader.nextU2 -1
-    	println(">>poolCount " + (poolCount))
     	cpool.add( ((dummy :: cpLoop(poolCount, parseConstantPool ))).toArray )
     	val constantPool = cpool 
-    	    	
+
+//    	cpool.dump
+    	
 //    	val constantPool = ((dummy :: List.tabulate(loader.nextU2 - 1) { _ => parseConstantPool })).toArray
     	val access_flags = loader.nextU2
     	val this_class = loader.nextU2
     	val super_class = loader.nextU2
- println(">>Loading interfaces")   	
+// println(">>Loading interfaces")   	
     	val interfaces = loop(loader.nextU2, loader.nextU2 ).toArray
- println(">>Loading fields")   	
+// println(">>Loading fields")   	
     	val fields = loop(loader.nextU2, fieldInfo() ).toArray
- println(">>Loading methods")   	
+// println(">>Loading methods")   	
     	val methods = loop(loader.nextU2, methodInfo() ).toArray
     	
     	val attrCount = loader.nextU2
- println(">>Loading attributes cnt: " + attrCount)   	
+// println(">>Loading attributes cnt: " + attrCount)   	
     	val attributes = loop(attrCount,  attributeInfo() ).toArray
- println(">>Loading end")   	
+// println(">>Loading end")   	
     	
     	val clazz = new ClazzFile(
     	    magic, minor_version, major_version, constantPool, access_flags, this_class, super_class,
