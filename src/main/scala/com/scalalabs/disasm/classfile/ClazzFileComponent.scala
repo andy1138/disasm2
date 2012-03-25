@@ -113,6 +113,8 @@ trait ClazzFileComponent extends ClazzFileRepositoryComponent {
     	        loop(nextU2, attributeInfo() ).toArray 
     	        )
     	    case ATTRIB_LineNumberTable => LineNumberTable_attribute( loop( nextU2, LNT_Lines( nextU2, nextU2)).toArray )
+    	    case ATTRIB_InnerClasses => InnerClasses_attribute( loop( nextU2, IC_classes( nextU2, nextU2, nextU2, nextU2)).toArray )
+    	    case ATTRIB_EnclosingMethod => EnclosingMethod_attribute(  nextU2, nextU2) 
 //    	    case ClazzFile.ATTRIB_ScalaSig => ScalaSig_attribute( List.tabulate(loader.nextU2) { _ => InnerClasses_attribute_classes(loader.nextU2, loader.nextU2, loader.nextU2, loader.nextU2)}.toArray )
     	    case _ => new UnknownAttribute(name,  loop(attrLength, nextU1).toArray )
     	  }

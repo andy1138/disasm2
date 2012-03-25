@@ -43,15 +43,30 @@ class ClazzFileComponentSuite extends FunSuite with ShouldMatchers {
 
   test("basic-2") {
   	
-  	val filename = "./target/scala-2.9.1/sbt-0.11.2/test-classes/com/scalalabs/disasm/input/Hello$.class"
+  	val filename = "./target/scala-2.9.1/sbt-0.11.2/test-classes/com/scalalabs/disasm/input/Hello$"
   			
 		val t = new ClazzFileComponent with FileLoader with JasminFormat with StdOut
-  			
-		t.loader.load(filename)
+		t.loader.load(filename + ".class")
 		val clazzFile = t.parse
-//		import clazzFile._
 		
   	t.formatter.format(clazzFile)
+  }
+  
+  test("a method") {
+  	
+  	val filename = "./target/scala-2.9.1/sbt-0.11.2/test-classes/com/scalalabs/disasm/input/Hello"
+  			
+		val t = new ClazzFileComponent with FileLoader with JasminFormat with StdOut
+		t.loader.load(filename + ".class")
+		val clazzFile = t.parse
+		
+		val lst = t.formatter.methodNames(clazzFile)
+		val res = t.formatter.methodOut("loopTest()V", clazzFile)
+		
+		println("---------\na method")
+//		lst.foreach( println(_))
+//		println("res.length: " + res.length)
+		res.foreach( println(_))
   }
   
 }

@@ -1,4 +1,5 @@
 package com.scalalabs.disasm.format
+
 import com.scalalabs.disasm.classfile.ClazzFile
 
 trait NullFormat extends FormatRepositoryComponent {

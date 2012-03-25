@@ -18,7 +18,7 @@ class CPool {
   private val items = new scala.collection.mutable.ArrayBuffer[cp_info]
   
   def add( a:Array[cp_info]) { a.foreach( add(_)) }
-  def add( i:cp_info ) { 
+  def add[T <: cp_info ]( i:T ) { 
     items += i 
     i match {
       case e:CONSTANT_Long_info  => items += CONSTANT_Dummy()
@@ -119,11 +119,12 @@ case class UnknownAttribute( title:String, info:Array[Byte]) extends attribute_i
 
 case class ConstantValue_attribute(constantvalue_index:Int) extends attribute_info(ClazzFile.ATTRIB_ConstantValue)
 case class SourceFile_attribute( sourcefile_index:Int ) extends attribute_info(ClazzFile.ATTRIB_SourceFile)
-case class InnerClasses_attribute( classes:Array[IC_classes] ) extends attribute_info(ClazzFile.ATTRIB_InnerClasses)
+case class InnerClasses_attribute( clazzes:Array[IC_classes] ) extends attribute_info(ClazzFile.ATTRIB_InnerClasses)
 case class RuntimeVisibleAnnotations_attribute( annotations:Array[RVA_annotation]) extends attribute_info(ClazzFile.ATTRIB_RuntimeVisibleAnnotations)
 case class Signature_attribute( signature_index:Int ) extends attribute_info(ClazzFile.ATTRIB_Signature)
 case class Code_attribute( max_stack:Int, max_locals:Int, code:Array[Byte], exceptions:Array[exception_table], annotations:Array[attribute_info] ) extends attribute_info(ClazzFile.ATTRIB_Code)
 case class LineNumberTable_attribute( lines:Array[LNT_Lines]) extends attribute_info(ClazzFile.ATTRIB_LineNumberTable)
+case class EnclosingMethod_attribute( class_index:Int, method_index:Int) extends attribute_info(ClazzFile.ATTRIB_LineNumberTable)
 
 //case class ScalaSig_attribute( classes:Array[InnerClasses_attribute_classes] ) extends attribute_info(ClazzFile.ATTRIB_InnerClasses)
 

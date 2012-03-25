@@ -7,6 +7,21 @@ import com.scalalabs.disasm.opcode._
 import com.scalalabs.disasm.opcode.Opcode._
 import com.scalalabs.disasm.classfile._
 
+  class AsmLine(val pc: Int, val txt: List[String]) {
+    class HexString(n: Int) {
+    //    def toHextStringX:String = n.toHexString
+    def toHexStr(len: Int): String = {
+      val s = n.toHexString
+      "0x" + ("0" * (len - s.length)) + s
+    }
+  }
+
+  implicit def intToHexString(n: Int) = new HexString(n)
+
+    override def toString():String =  pc.toHexStr(4) + " " + txt.mkString(" ")
+  }
+
+
 class CodeAttrib(code: Array[Byte], val cpool: CPool) {
 
   def unsign(b: Byte): Int = (b & 0xff)
@@ -66,9 +81,6 @@ class CodeAttrib(code: Array[Byte], val cpool: CPool) {
 //    cpool.at(idx).toString //mkString 
   }
 
-  class AsmLine(val pc: Int, val txt: String) {
-    override def toString():String =  pc.toHexStr(4) + " " + txt
-  }
 
 
   def disAsmAttrib(code: Array[Byte], attr: Array[attribute_info]): List[AsmLine] = {
@@ -126,7 +138,7 @@ class CodeAttrib(code: Array[Byte], val cpool: CPool) {
           pc += 1 + opsize(opcode(opVal)._3)
 
       }
-      buff += new AsmLine(pcLine ,aline.mkString(" "))
+      buff += new AsmLine(pcLine, aline.toList)
     }
     buff.toList
   }
